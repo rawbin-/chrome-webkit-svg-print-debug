@@ -9,18 +9,15 @@ const ReportDetail: React.FC = () => {
   console.log(localData);
   return (
     <div id={'report-preview'}>
-      <MonitorInfo localData={localData} />
       // 如下这种写法无法打印预览svg图
       <List
-        grid={{
-          gutter: 16,
-          xs: 1,
-          sm: 1,
-          md: 2,
-          lg: 2,
-          xl: 2,
-          xxl: 3,
+        dataSource={localData}
+        renderItem={(item) => {
+          return LineChart(item)
         }}
+      ></List>
+      // 如下这种写法无法打印预览svg图
+      <List
         dataSource={localData}
         renderItem={(item) => {
           return <List.Item>
@@ -32,15 +29,6 @@ const ReportDetail: React.FC = () => {
       ></List>
       // 如下这种写法可以打印预览svg图
       <List
-        grid={{
-          gutter: 16,
-          xs: 1,
-          sm: 1,
-          md: 2,
-          lg: 2,
-          xl: 2,
-          xxl: 3,
-        }}
         dataSource={localData.map(item => LineChart(item))}
         renderItem={(item) => {
           return <List.Item>
@@ -50,7 +38,7 @@ const ReportDetail: React.FC = () => {
           </List.Item>
         }}
       ></List>
-
+      <MonitorInfo localData={localData} />
       <DemoLine></DemoLine>
       <List
         grid={{
@@ -71,7 +59,6 @@ const ReportDetail: React.FC = () => {
             </List.Item>
         }}
       >
-
       </List>
     </div>
   );
