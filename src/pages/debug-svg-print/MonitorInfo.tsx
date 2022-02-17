@@ -58,27 +58,37 @@ const useChartInfo = (params: any, updatingTimer: any, localData?: any[]) => {
 const MonitorInfo: React.FC = ({ params, updatingTimer, localData }) => {
   const chartData = useChartInfo(params, updatingTimer, localData);
 
-  return (
-      chartData.map(item => {
-          const {chartType, title} = item;
-          const targetFC = chartTypeFCMap[chartType];
-          // @ts-ignore
-          targetFC.key = title;
-          if (targetFC) {
-            return (
-              <Card title={title}>
-                {typeof targetFC === 'function' && (targetFC as Function)(item)}
-              </Card>
-            );
-          }
-          return null
-        }
-      )
-    )
+  // 如下代码可以让svg图像在打印预览的时候显示出来，PDF打印也就能出来
+  // return (
+  //     chartData.map(item => {
+  //         const {chartType, title} = item;
+  //         const targetFC = chartTypeFCMap[chartType];
+  //         // @ts-ignore
+  //         targetFC.key = title;
+  //         if (targetFC) {
+  //           return (
+  //             <Card title={title}>
+  //               {typeof targetFC === 'function' && (targetFC as Function)(item)}
+  //             </Card>
+  //           );
+  //         }
+  //         return null
+  //       }
+  //     )
+  //   )
 
-  // @ts-ignore
+  // 以下代码svg 图形在Chrome打印预览无法看到图片，导出PDF就没有图片
   return (
     <List
+      grid={{
+        gutter: 16,
+        xs: 1,
+        sm: 1,
+        md: 2,
+        lg: 2,
+        xl: 2,
+        xxl: 3,
+      }}
       dataSource={chartData}
       renderItem={(item) => {
         const { chartType, title } = item;
