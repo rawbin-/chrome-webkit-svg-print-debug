@@ -26,6 +26,7 @@ export async function getInitialState(): Promise<{
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
+
   const fetchUserInfo = async () => {
     try {
       const msg = await queryCurrentUser();
@@ -35,6 +36,10 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
+  return {
+    fetchUserInfo,
+    settings: defaultSettings,
+  }
   // 如果是登录页面，不执行
   if (history.location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
@@ -61,6 +66,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
+      //TODO 禁用登录
+      return true
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
