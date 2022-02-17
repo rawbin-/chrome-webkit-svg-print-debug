@@ -57,19 +57,28 @@ const useChartInfo = (params: any, updatingTimer: any, localData?: any[]) => {
 
 const MonitorInfo: React.FC = ({ params, updatingTimer, localData }) => {
   const chartData = useChartInfo(params, updatingTimer, localData);
-  // @ts-ignore
+
+  return (
+      chartData.map(item => {
+          const {chartType, title} = item;
+          const targetFC = chartTypeFCMap[chartType];
+          // @ts-ignore
+          targetFC.key = title;
+          if (targetFC) {
+            return (
+              <Card title={title}>
+                {typeof targetFC === 'function' && (targetFC as Function)(item)}
+              </Card>
+            );
+          }
+          return null
+        }
+      )
+    )
+
   // @ts-ignore
   return (
     <List
-      grid={{
-        gutter: 16,
-        xs: 1,
-        sm: 1,
-        md: 2,
-        lg: 2,
-        xl: 2,
-        xxl: 3,
-      }}
       dataSource={chartData}
       renderItem={(item) => {
         const { chartType, title } = item;
